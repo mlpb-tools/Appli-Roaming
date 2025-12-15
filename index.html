@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROAMING - Formation Mobilité Internationale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-orange: #f39200;
+            --color-vert: #95c11f;
+            --color-bleu: #2897d5;
+            --color-rose: #d60b52;
+            --color-violet: #a3195b;
+            --color-rouge: #9f3d3f;
+            --color-noir: #171718;
+            --color-white: #FFFFFF;
+            --color-grey: #F5F5F5;
+            --color-jaune: #FFD166;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--color-white);
+            color: var(--color-noir);
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            display: none;
+            position: relative;
+            padding: 25px 35px;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .content {
+            width: 100%;
+            max-width: 1400px;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--color-rouge);
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            z-index: 9999;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-orange), var(--color-rose), var(--color-violet));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* MODULE CARDS */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 18px;
+        }
+
+        .module-card {
+            background: white;
+            padding: 20px;
+            border: 4px solid var(--color-noir);
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px) rotate(1deg);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.15);
+        }
+
+        .module-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .module-number {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--color-noir);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 15px;
+            border: 3px solid white;
+        }
+
+        .module-title {
+            font-size: 16px;
+            font-weight: 900;
+            margin-bottom: 7px;
+            line-height: 1.3;
+        }
+
+        .module-desc {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #555;
+        }
+
+        /* SEQUENCE LIST */
+        .sequence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .sequence-item {
+            background: white;
+            padding: 15px;
+            border: 3px solid var(--color-noir);
+            border-radius: 12px;
+            border-left: 8px solid;
+            transition: all 0.3s;
+        }
+
+        .sequence-item:hover {
+            transform: translateX(10px);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .sequence-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .sequence-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--color-noir);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .sequence-title {
+            font-size: 14px;
+            font-weight: 900;
+            flex: 1;
+        }
+
+        .sequence-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .sequence-field {
+            background: #f8f8f8;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .field-label {
+            font-weight: 700;
+            font-size: 9px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .field-value {
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 2px solid var(--color-noir);
+            margin: 3px;
+        }
+
+        /* NAVIGATION */
+        .nav-controls {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 3px solid var(--color-noir);
+            background: var(--color-orange);
+            color: white;
+            font-size: 24px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.3);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: var(--color-noir);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 15px;
+            z-index: 1000;
+            border: 3px solid white;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .slide { padding: 20px 12px; }
+            h1 { font-size: 32px; }
+            h2 { font-size: 20px; }
+            h3 { font-size: 16px; }
+            .subtitle { font-size: 13px; }
+            .module-grid { grid-template-columns: 1fr; gap: 12px; }
+            .sequence-content { grid-template-columns: 1fr; gap: 8px; }
+            .nav-btn { width: 50px; height: 50px; font-size: 20px; }
+            .module-icon { font-size: 32px; }
+            .sequence-list { gap: 10px; }
+            .sequence-item { padding: 12px; }
+        }
+
+        /* COLOR THEMES */
+        .module-1 { border-color: var(--color-bleu); }
+        .module-2 { border-color: var(--color-vert); }
+        .module-3 { border-color: var(--color-rose); }
+        .module-4 { border-color: var(--color-orange); }
+        .module-5 { border-color: var(--color-violet); }
+    </style>
+</head>
+<body>
+    <!-- PROGRESS BAR -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <div class="presentation">
+        <!-- SLIDE 1 - COUVERTURE -->
+        <div class="slide active">
+            <div class="content" style="text-align: center;">
+                <div style="font-size: 65px; margin-bottom: 15px;">🚀</div>
+                <h1 style="font-size: 48px; margin-bottom: 12px;">ROAMING</h1>
+                <p class="subtitle" style="font-size: 18px; color: var(--color-orange);">Programme de Formation<br>Mobilité Internationale</p>
+                
+                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 28px; flex-wrap: wrap;">
+                    <div style="background: var(--color-bleu); color: white; padding: 18px 25px; border-radius: 15px; border: 4px solid var(--color-noir); box-shadow: 6px 6px 0 rgba(0,0,0,0.15);">
+                        <div style="font-size: 36px; font-weight: 900;">5</div>
+                        <div style="font-size: 13px; font-weight: 600;">MODULES</div>
+                    </div>
+                    <div style="background: var(--color-vert); color: white; padding: 18px 25px; border-radius: 15px; border: 4px solid var(--color-noir); box-shadow: 6px 6px 0 rgba(0,0,0,0.15);">
+                        <div style="font-size: 36px; font-weight: 900;">18</div>
+                        <div style="font-size: 13px; font-weight: 600;">SÉQUENCES</div>
+                    </div>
+                    <div style="background: var(--color-rose); color: white; padding: 18px 25px; border-radius: 15px; border: 4px solid var(--color-noir); box-shadow: 6px 6px 0 rgba(0,0,0,0.15);">
+                        <div style="font-size: 36px; font-weight: 900;">100%</div>
+                        <div style="font-size: 13px; font-weight: 600;">PRATIQUE</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 32px; background: linear-gradient(135deg, var(--color-orange), var(--color-rose)); color: white; padding: 20px; border-radius: 20px; border: 4px solid var(--color-noir); box-shadow: 8px 8px 0 rgba(0,0,0,0.15);">
+                    <p style="font-size: 16px; font-weight: 700;">
+                        🎯 Former les conseillers Mission Locale à l'accompagnement mobilité
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2 - VUE D'ENSEMBLE -->
+        <div class="slide">
+            <div class="content">
+                <h2>VUE D'ENSEMBLE DU PARCOURS</h2>
+                <p class="subtitle">5 modules pour maîtriser l'accompagnement mobilité</p>
+
+                <div class="module-grid">
+                    <div class="module-card module-1">
+                        <div class="module-number">1</div>
+                        <div class="module-icon">🔵</div>
+                        <div class="module-title">Comprendre la mobilité</div>
+                        <div class="module-desc">Lever les croyances limitantes et identifier les profils</div>
+                        <div style="margin-top: 12px;">
+                            <span class="badge" style="background: #E3F2FD; color: var(--color-bleu);">3 séquences</span>
+                        </div>
+                    </div>
+
+                    <div class="module-card module-2">
+                        <div class="module-number">2</div>
+                        <div class="module-icon">🟢</div>
+                        <div class="module-title">Construire le départ</div>
+                        <div class="module-desc">Dispositifs, plan de route et préparation complète</div>
+                        <div style="margin-top: 12px;">
+                            <span class="badge" style="background: #F1F8E9; color: var(--color-vert);">4 séquences</span>
+                        </div>
+                    </div>
+
+                    <div class="module-card module-3">
+                        <div class="module-number">3</div>
+                        <div class="module-icon">💗</div>
+                        <div class="module-title">Pendant la mobilité</div>
+                        <div class="module-desc">Suivi à distance et prévention des ruptures</div>
+                        <div style="margin-top: 12px;">
+                            <span class="badge" style="background: #FCE4EC; color: var(--color-rose);">2 séquences</span>
+                        </div>
+                    </div>
+
+                    <div class="module-card module-4">
+                        <div class="module-number">4</div>
+                        <div class="module-icon">🟧</div>
+                        <div class="module-title">Après la mobilité</div>
+                        <div class="module-desc">Retour, valorisation et témoignage</div>
+                        <div style="margin-top: 12px;">
+                            <span class="badge" style="background: #FFF3E0; color: var(--color-orange);">3 séquences</span>
+                        </div>
+                    </div>
+
+                    <div class="module-card module-5">
+                        <div class="module-number">5</div>
+                        <div class="module-icon">🟪</div>
+                        <div class="module-title">Rôle des ML & Réseau</div>
+                        <div class="module-desc">Stratégie institutionnelle et partenariats</div>
+                        <div style="margin-top: 12px;">
+                            <span class="badge" style="background: #F3E5F5; color: var(--color-violet);">3 séquences</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3 - MODULE 1 -->
+        <div class="slide" style="background: linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 100%);">
+            <div class="content">
+                <h2 style="color: var(--color-bleu);">🔵 MODULE 1 – COMPRENDRE LA MOBILITÉ</h2>
+                <p class="subtitle">Lever les croyances limitantes</p>
+
+                <div class="sequence-list">
+                    <div class="sequence-item module-1">
+                        <div class="sequence-header">
+                            <div class="sequence-number">1.1</div>
+                            <div class="sequence-title">Pourquoi la mobilité internationale ?</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Faire comprendre la valeur éducative et sociale de la mobilité</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier les bénéfices clés et les relier à l'insertion</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Argumenter sur les apports de la mobilité</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-1">
+                        <div class="sequence-header">
+                            <div class="sequence-number">1.2</div>
+                            <div class="sequence-title">Déconstruire les croyances limitantes</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Changer de posture face aux freins culturels ou sociaux</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Repérer les croyances et formuler des contre-arguments</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Adopter une posture ouverte et inclusive</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-1">
+                        <div class="sequence-header">
+                            <div class="sequence-number">1.3</div>
+                            <div class="sequence-title">Identifier le profil mobilité du jeune</div>
+                            <span class="badge" style="background: var(--color-bleu); color: white;">DiagMob</span>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Adapter l'accompagnement à chaque profil</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Utiliser la grille ROAMING et interpréter un profil</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Adapter l'accompagnement selon le profil motivationnel</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4 - MODULE 2 -->
+        <div class="slide" style="background: linear-gradient(135deg, #F1F8E9 0%, #FFFFFF 100%);">
+            <div class="content">
+                <h2 style="color: var(--color-vert);">🟢 MODULE 2 – CONSTRUIRE LE DÉPART</h2>
+                <p class="subtitle">De l'orientation au plan de route</p>
+
+                <div class="sequence-list">
+                    <div class="sequence-item module-2">
+                        <div class="sequence-header">
+                            <div class="sequence-number">2.1</div>
+                            <div class="sequence-title">Connaître les dispositifs & financements</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">S'orienter dans la complexité des programmes</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier dispositifs et critères d'éligibilité</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Conseiller et orienter vers le bon dispositif</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-2">
+                        <div class="sequence-header">
+                            <div class="sequence-number">2.2</div>
+                            <div class="sequence-title">Construire son plan de route mobilité</div>
+                            <span class="badge" style="background: var(--color-vert); color: white;">DiagMob</span>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Structurer la préparation du projet</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Créer un plan cohérent avec les objectifs du jeune</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Co-construire un plan individualisé</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-2">
+                        <div class="sequence-header">
+                            <div class="sequence-number">2.3</div>
+                            <div class="sequence-title">La boîte à outils anti-galère</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Gérer les imprévus et sécuriser le parcours</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier situations à risque et solutions</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Proposer alternatives concrètes en cas d'imprévu</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-2">
+                        <div class="sequence-header">
+                            <div class="sequence-number">2.4</div>
+                            <div class="sequence-title">Préparer le départ (parents & environnement)</div>
+                            <a href="https://mlpb-tools.my.canva.site/le-voyage-du-heros" target="_blank" class="badge" style="background: var(--color-orange); color: white; text-decoration: none; cursor: pointer;">🦸 Voyage du Héros</a>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Impliquer familles et proches dans la préparation</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Répondre aux inquiétudes par des outils adaptés</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Animer un échange parents/jeunes autour du départ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; background: linear-gradient(135deg, var(--color-orange), #FFD166); color: var(--color-noir); padding: 18px; border-radius: 15px; border: 4px solid var(--color-noir); box-shadow: 6px 6px 0 rgba(0,0,0,0.1);">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px;">🦸</div>
+                        <div style="flex: 1;">
+                            <h3 style="font-size: 16px; margin-bottom: 6px; font-weight: 900;">Outil pratique : Le Voyage du Héros</h3>
+                            <p style="font-size: 12px; line-height: 1.4; margin-bottom: 8px;">
+                                Outil narratif pour aider le jeune à se projeter dans son aventure mobilité
+                            </p>
+                            <a href="https://mlpb-tools.my.canva.site/le-voyage-du-heros" target="_blank" style="display: inline-block; background: white; color: var(--color-orange); padding: 8px 15px; border-radius: 20px; font-size: 11px; font-weight: 700; text-decoration: none; border: 2px solid var(--color-noir); transition: all 0.3s;">
+                                🔗 Accéder à l'outil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5 - MODULE 3 -->
+        <div class="slide" style="background: linear-gradient(135deg, #FCE4EC 0%, #FFFFFF 100%);">
+            <div class="content">
+                <h2 style="color: var(--color-rose);">💗 MODULE 3 – PENDANT LA MOBILITÉ</h2>
+                <p class="subtitle">Accompagnement à distance et prévention</p>
+
+                <div class="sequence-list">
+                    <div class="sequence-item module-3">
+                        <div class="sequence-header">
+                            <div class="sequence-number">3.1</div>
+                            <div class="sequence-title">Garder le lien & feedback à distance</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Maintenir le lien humain en mobilité</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier bons canaux et pratiques de feedback</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Réaliser un suivi efficace à distance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-3">
+                        <div class="sequence-header">
+                            <div class="sequence-number">3.2</div>
+                            <div class="sequence-title">Ajuster et prévenir les ruptures</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Réorienter sans rompre le parcours</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier signaux faibles et mobiliser relais</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Médiation et reformulation du projet</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; background: white; padding: 20px; border-radius: 15px; border: 4px solid var(--color-rose); box-shadow: 6px 6px 0 rgba(0,0,0,0.1);">
+                    <h3 style="color: var(--color-rose); margin-bottom: 10px; font-size: 17px;">💡 Point clé du module</h3>
+                    <p style="font-size: 13px; line-height: 1.5;">
+                        Ce module développe les compétences d'accompagnement à distance : maintenir le contact, détecter les difficultés et intervenir de manière ajustée pour prévenir les abandons.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6 - MODULE 4 -->
+        <div class="slide" style="background: linear-gradient(135deg, #FFF3E0 0%, #FFFFFF 100%);">
+            <div class="content">
+                <h2 style="color: var(--color-orange);">🟧 MODULE 4 – APRÈS LA MOBILITÉ</h2>
+                <p class="subtitle">Valorisation et témoignage</p>
+
+                <div class="sequence-list">
+                    <div class="sequence-item module-4">
+                        <div class="sequence-header">
+                            <div class="sequence-number">4.1</div>
+                            <div class="sequence-title">Mener l'entretien de retour</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Accompagner le bilan de l'expérience vécue</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier les étapes : émotion, compétence, projet</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Conduire un entretien de valorisation</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-4">
+                        <div class="sequence-header">
+                            <div class="sequence-number">4.2</div>
+                            <div class="sequence-title">Valoriser les acquis et compétences</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Traduire l'expérience en atout professionnel</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Relier expériences aux compétences transférables</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Co-rédiger un CV mobilité / badge</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-4">
+                        <div class="sequence-header">
+                            <div class="sequence-number">4.3</div>
+                            <div class="sequence-title">Communiquer et témoigner</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Aider le jeune à partager son expérience</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier les messages clés à transmettre</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Aider à construire un témoignage inspirant</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7 - MODULE 5 -->
+        <div class="slide" style="background: linear-gradient(135deg, #F3E5F5 0%, #FFFFFF 100%);">
+            <div class="content">
+                <h2 style="color: var(--color-violet);">🟪 MODULE 5 – RÔLE DES ML & RÉSEAU</h2>
+                <p class="subtitle">Stratégie institutionnelle et coopération territoriale</p>
+
+                <div class="sequence-list">
+                    <div class="sequence-item module-5">
+                        <div class="sequence-header">
+                            <div class="sequence-number">5.1</div>
+                            <div class="sequence-title">Le rôle stratégique des ML</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Positionner la ML comme acteur clé mobilité</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Comprendre la mission publique et cadre partenarial</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Argumenter le rôle stratégique de la ML</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-5">
+                        <div class="sequence-header">
+                            <div class="sequence-number">5.2</div>
+                            <div class="sequence-title">Structurer le réseau de partenaires</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Renforcer la coopération territoriale</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier partenaires clés et formaliser échanges</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Construire et suivre une carte réseau mobilité</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sequence-item module-5">
+                        <div class="sequence-header">
+                            <div class="sequence-number">5.3</div>
+                            <div class="sequence-title">Capitaliser et diffuser</div>
+                        </div>
+                        <div class="sequence-content">
+                            <div class="sequence-field">
+                                <div class="field-label">🎯 Enjeu</div>
+                                <div class="field-value">Pérenniser la démarche mobilité</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">📚 Objectif</div>
+                                <div class="field-value">Identifier les formes de capitalisation</div>
+                            </div>
+                            <div class="sequence-field">
+                                <div class="field-label">💼 Compétence</div>
+                                <div class="field-value">Produire et diffuser une fiche retour d'expérience</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8 - RÉCAPITULATIF -->
+        <div class="slide">
+            <div class="content" style="text-align: center;">
+                <h2>VOTRE PARCOURS ROAMING</h2>
+                <p class="subtitle">Un accompagnement complet en 5 étapes</p>
+
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 28px 0;">
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 8px; background: var(--color-bleu); border-radius: 50%; border: 4px solid var(--color-noir); display: flex; align-items: center; justify-content: center; font-size: 28px;">🔵</div>
+                        <div style="font-weight: 900; font-size: 12px;">COMPRENDRE</div>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">Lever les freins</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 8px; background: var(--color-vert); border-radius: 50%; border: 4px solid var(--color-noir); display: flex; align-items: center; justify-content: center; font-size: 28px;">🟢</div>
+                        <div style="font-weight: 900; font-size: 12px;">CONSTRUIRE</div>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">Préparer le départ</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 8px; background: var(--color-rose); border-radius: 50%; border: 4px solid var(--color-noir); display: flex; align-items: center; justify-content: center; font-size: 28px;">💗</div>
+                        <div style="font-weight: 900; font-size: 12px;">SUIVRE</div>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">À distance</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 8px; background: var(--color-orange); border-radius: 50%; border: 4px solid var(--color-noir); display: flex; align-items: center; justify-content: center; font-size: 28px;">🟧</div>
+                        <div style="font-weight: 900; font-size: 12px;">VALORISER</div>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">Au retour</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 60px; height: 60px; margin: 0 auto 8px; background: var(--color-violet); border-radius: 50%; border: 4px solid var(--color-noir); display: flex; align-items: center; justify-content: center; font-size: 28px;">🟪</div>
+                        <div style="font-weight: 900; font-size: 12px;">PÉRENNISER</div>
+                        <div style="font-size: 10px; color: #666; margin-top: 4px;">Réseau & stratégie</div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 25px; border-radius: 20px; border: 4px solid var(--color-noir); margin-top: 32px; box-shadow: 8px 8px 0 rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 20px; margin-bottom: 12px;">🎯 Objectif global</h3>
+                    <p style="font-size: 14px; line-height: 1.6;">
+                        Former les <strong>conseillers Mission Locale</strong> à maîtriser l'accompagnement mobilité internationale du diagnostic initial jusqu'à la valorisation des acquis, en passant par la construction du projet et le suivi à distance.
+                    </p>
+                </div>
+
+                <div style="margin-top: 28px; background: linear-gradient(135deg, var(--color-orange), var(--color-rose), var(--color-violet)); color: white; padding: 20px; border-radius: 20px; border: 4px solid var(--color-noir); box-shadow: 8px 8px 0 rgba(0,0,0,0.15);">
+                    <p style="font-size: 16px; font-weight: 700;">
+                        🚀 Une formation <strong>100% pratique</strong> avec outils opérationnels
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="changeSlide(-1)">←</button>
+        <button class="nav-btn" onclick="changeSlide(1)">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        let totalSlides = 0;
+
+        function changeSlide(n) {
+            currentSlide += n;
+            showSlide(currentSlide);
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                const progress = (currentSlide / totalSlides) * 100;
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) {
+                currentSlide = 1;
+            }
+            if (n < 1) {
+                currentSlide = totalSlides;
+            }
+            
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            if (slides[currentSlide - 1]) {
+                slides[currentSlide - 1].classList.add('active');
+            }
+            
+            const currentSlideElement = document.getElementById('currentSlide');
+            if (currentSlideElement) {
+                currentSlideElement.textContent = currentSlide;
+            }
+            
+            updateProgressBar();
+            window.scrollTo(0, 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            totalSlides = document.querySelectorAll('.slide').length;
+            
+            const totalSlidesElement = document.getElementById('totalSlides');
+            if (totalSlidesElement) {
+                totalSlidesElement.textContent = totalSlides;
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    changeSlide(-1);
+                } else if (e.key === 'ArrowRight') {
+                    changeSlide(1);
+                }
+            });
+
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>
